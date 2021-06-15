@@ -25,6 +25,7 @@ const nonExistingLikes = async () => {
   const blog = new Blog({
     title: 'no likes :(',
     author: 'Sarah Q.',
+    url: 'http://google.com',
   })
 
   return await blog.save()

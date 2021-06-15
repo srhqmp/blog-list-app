@@ -7,7 +7,6 @@ const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-
   const blogObject = helper.initialBlogs.map((blog) => new Blog(blog))
   const promiseArray = blogObject.map((blog) => blog.save())
   await Promise.all(promiseArray)
@@ -54,6 +53,20 @@ test('a blog can be added', async () => {
 test('likes is "0" when likes property is missing', async () => {
   const nonExistingLikes = await helper.nonExistingLikes()
   expect(nonExistingLikes.likes).toEqual(0)
+})
+
+test('respond with status code 400 Bad Request if "title" and "url" properties are missing', async () => {
+  const blogWithoutTitle = {
+    author: 'Sarah Q.',
+    url: 'http://google.com',
+  }
+  const blogWithoutUrl = {
+    title: 'no likes :(',
+    author: 'Sarah Q.',
+  }
+
+  await api.post('/api/blogs').send(blogWithoutTitle).expect(400)
+  await api.post('/api/blogs').send(blogWithoutUrl).expect(400)
 })
 
 afterAll(() => {
