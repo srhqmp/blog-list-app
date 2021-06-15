@@ -26,7 +26,29 @@ test('blog list returns correct amount of blog posts in JSON format', async () =
 
 test('blog post returns unique identifier as "id"', async () => {
   const response = await api.get('/api/blogs')
-  response.body.map(blog => expect(blog.id).toBeDefined())
+  response.body.map((blog) => expect(blog.id).toBeDefined())
+})
+
+test('a blog can be added', async () => {
+  const newBlog = {
+    title: 'new blog',
+    author: 'SJQ',
+    url: 'http://google.com',
+    likes: 1,
+  }
+  const blogsAtStart = await helper.blogsInDb()
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd.length).toEqual(blogsAtStart.length + 1)
+
+  const titles = blogsAtEnd.map((blog) => blog.title)
+  expect(titles).toContain(newBlog.title)
 })
 
 afterAll(() => {
