@@ -51,6 +51,11 @@ test('a blog can be added', async () => {
   expect(titles).toContain(newBlog.title)
 })
 
+test('likes is "0" when likes property is missing', async () => {
+  const nonExistingLikes = await helper.nonExistingLikes()
+  expect(nonExistingLikes.likes).toEqual(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
