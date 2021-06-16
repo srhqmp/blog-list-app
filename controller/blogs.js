@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const userExtractor = require('../utils/middleware').userExtractor
 
 // GET all blogs
 blogsRouter.get('/', async (request, response) => {
@@ -17,16 +18,9 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 // CREATE new blog
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
   const body = request.body
-
-  const token = request.token
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
-  const user = await User.findById(decodedToken.id)
+  const user = request.user
 
   const blog = new Blog({
     title: body.title,
@@ -44,24 +38,21 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 // DELETE a blog
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   const id = request.params.id
-  const body = request.body
-
-  const token = request.token
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
+  const user = request.user
   const blog = await Blog.findById(id)
-  if (blog.user.toString() === decodedToken.id.toString()) {
+
+  if (!blog) {
+    return response.status(404).json({ error: 'blog not found' })
+  } else if (blog.user.toString() === user._id.toString()) {
     await Blog.findByIdAndRemove(id)
     return response.status(204).end()
+  } else {
+    return response
+      .status(401)
+      .json({ error: `you can't delete blog of other user` })
   }
-  return response
-    .status(401)
-    .json({ error: `you can't delete blog of other user` })
 })
 
 // UPDATE blog likes
