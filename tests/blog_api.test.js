@@ -58,6 +58,7 @@ describe('viewing a specific blog', () => {
 
 describe('addition of a new blog', () => {
   test('returns statuscode 200 if data is valid', async () => {
+    const token = await helper.loginUser()
     const newBlog = {
       title: 'new blog',
       author: 'SJQ',
@@ -65,9 +66,9 @@ describe('addition of a new blog', () => {
       likes: 1,
     }
     const blogsAtStart = await helper.blogsInDb()
-
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -85,6 +86,8 @@ describe('addition of a new blog', () => {
   })
 
   test('respond with status code 400 Bad Request if "title" and "url" properties are missing', async () => {
+    const token = await helper.loginUser()
+
     const blogWithoutTitle = {
       author: 'Sarah Q.',
       url: 'http://google.com',
@@ -94,23 +97,52 @@ describe('addition of a new blog', () => {
       author: 'Sarah Q.',
     }
 
-    await api.post('/api/blogs').send(blogWithoutTitle).expect(400)
-    await api.post('/api/blogs').send(blogWithoutUrl).expect(400)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(blogWithoutTitle)
+      .expect(400)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(blogWithoutUrl)
+      .expect(400)
   })
 })
 
 describe('deletion of a blog', () => {
   test('succeeds with a status code of 204 if id is valid', async () => {
-    const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
+    const token = await helper.loginUser()
+    const newBlog = {
+      title: 'new blog',
+      author: 'SJQ',
+      url: 'http://google.com',
+      likes: 1,
+    }
+    const blogToDelete = await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+    const blogsAtStart = await helper.blogsInDb()
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd.length).toEqual(blogsAtStart.length - 1)
 
     const titles = blogsAtEnd.map((blog) => blog.title)
     expect(titles).not.toContain(blogToDelete.title)
+  })
+
+  test('will fail with statuscode 401 Unauthorized if user try to delete post of other', async () => {
+    const blogToDelete = await helper.blogsInDb()
+    await api.delete(`/api/blogs/${blogToDelete[0].id}`).expect(401)
   })
 })
 
