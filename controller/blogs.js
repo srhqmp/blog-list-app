@@ -28,7 +28,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
-// UPDATE a blog likes
+// UPDATE blog likes
 blogsRouter.put('/:id', async (request, response) => {
   const id = request.params.id
   const likes = { likes: request.body.likes }
