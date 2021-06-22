@@ -28,6 +28,7 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
     likes: body.likes,
     url: body.url,
     user: user._id,
+    userId: user._id,
   })
 
   const savedBlog = await blog.save()
@@ -45,14 +46,16 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
 
   if (!blog) {
     return response.status(404).json({ error: 'blog not found' })
-  } else if (blog.user.toString() === user._id.toString()) {
-    await Blog.findByIdAndRemove(id)
-    return response.status(204).end()
-  } else {
-    return response
-      .status(401)
-      .json({ error: `you can't delete blog of other user` })
   }
+
+  if (user.blogs.indexOf(blog._id) !== -1) {
+    await Blog.findByIdAndRemove(id)
+    return response.json(`Successfully deleted blog ${blog.title}`)
+  }
+  return response
+    .status(401)
+    .json({ error: 'You cannot delete blog of other user' })
+    .end()
 })
 
 // UPDATE blog likes
