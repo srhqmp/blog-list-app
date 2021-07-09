@@ -80,4 +80,32 @@ blogsRouter.put('/:id', async (request, response) => {
     : response.status(404).end()
 })
 
+//ADD comment to a blog
+blogsRouter.put('/:id/comments?', async (request, response) => {
+  const id = request.params.id
+  const user = request.user
+  const body = request.body
+
+  const comment = body.comment
+  const blog = await Blog.findById(id)
+
+  if (!comment) {
+    return response.status(400).send(`Can't add empty comment`)
+  } else if (!blog) {
+    return response.status(404).send(`Blog doesn't exist`)
+  }
+
+  const comments = blog.comments ? [...blog.comments, comment] : [comment]
+
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    id,
+    { comments },
+    { new: true }
+  )
+
+  updatedBlog
+    ? response.status(200).send(updatedBlog)
+    : response.status(404).end()
+})
+
 module.exports = blogsRouter
