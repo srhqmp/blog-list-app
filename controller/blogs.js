@@ -28,15 +28,19 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
     likes: body.likes,
     url: body.url,
     user: user._id,
-    userId: user._id,
+    username: user.username,
   })
 
-  const savedBlog = await blog.save()
+  let savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
   savedBlog ? response.status(200).json(savedBlog) : response.status(400).end()
 })
+
+const checkBlogInUser = (user, blogId) => {
+  return user.blogs.find((blog) => blog.id === blogId)
+}
 
 // DELETE a blog
 blogsRouter.delete('/:id', userExtractor, async (request, response) => {
@@ -45,17 +49,22 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   const blog = await Blog.findById(id)
 
   if (!blog) {
-    return response.status(404).json({ error: 'blog not found' })
+    return response.status(404).send('Blog not found')
   }
 
-  if (user.blogs.indexOf(blog._id) !== -1) {
-    await Blog.findByIdAndRemove(id)
+  // check if blog exists in username lists
+  const blogExists = checkBlogInUser(user, id)
+
+  if (blogExists) {
+    await Blog.findByIdAndRemove(blog.id)
+
+    user.blogs = user.blogs.filter((blog) => blog.id !== id)
+    await user.save()
+
     return response.json(`Successfully deleted blog ${blog.title}`)
+  } else {
+    return response.status(404).send('You cannot delete blog of other user')
   }
-  return response
-    .status(401)
-    .json({ error: 'You cannot delete blog of other user' })
-    .end()
 })
 
 // UPDATE blog likes

@@ -29,7 +29,10 @@ const userExtractor = async (req, res, next) => {
   if (!token || !decodedToken.id) {
     return res.status(401).json({ error: 'token missing or invalid' })
   }
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(decodedToken.id).populate('blogs', {
+    title: 1,
+    username: 1,
+  })
   if (!user) {
     return res.status(401).json({ error: 'invalid user' })
   }
