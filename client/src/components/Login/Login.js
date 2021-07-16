@@ -24,17 +24,17 @@ const Login = () => {
   }
 
   const userLogout = () => (
-    <span>
-      <Typography>{`${loggedinUser.name} logged in`}</Typography>{' '}
+    <Typography>
+      {`Hi ${loggedinUser.name}`}{' '}
       <Button
-        startIcon={<ExitToAppIcon />}
         color="secondary"
         variant="contained"
         onClick={handleLogout}
+        style={{ marginLeft: 5 }}
       >
-        logout
+        <ExitToAppIcon />
       </Button>
-    </span>
+    </Typography>
   )
 
   const loginFormRef = useRef()

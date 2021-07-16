@@ -4,7 +4,6 @@ import { useField } from '../../hooks'
 
 import { login } from '../../reducers/loginReducer'
 
-import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 import { makeStyles } from '@material-ui/core'
@@ -12,15 +11,15 @@ import TextField from '@material-ui/core/TextField'
 
 const useStyles = makeStyles({
   field: {
-    marginTop: 20,
-    marginBottom: 20,
-    display: 'block',
+    marginLeft: 5,
+    display: 'inline-block',
   },
   form: {
     display: 'inline',
   },
   login: {
     marginRight: 5,
+    marginLeft: 5,
   },
 })
 
@@ -51,14 +50,6 @@ const LoginForm = ({ loginFormRef }) => {
       onSubmit={handleLogin}
       className={classes.form}
     >
-      <Typography
-        variant="h6"
-        color="textSecondary"
-        component="h2"
-        gutterBottom
-      >
-        Login
-      </Typography>
       <TextField
         className={classes.field}
         label="username"
@@ -66,6 +57,7 @@ const LoginForm = ({ loginFormRef }) => {
         color="secondary"
         required
         {...usernameInput}
+        size="small"
       />
       <TextField
         className={classes.field}
@@ -74,6 +66,7 @@ const LoginForm = ({ loginFormRef }) => {
         color="secondary"
         required
         {...passwordInput}
+        size="small"
       />
       <Button
         type="submit"

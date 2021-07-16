@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/core'
 import Drawer from '@material-ui/core/Drawer'
 import Typography from '@material-ui/core/Typography'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -11,24 +11,40 @@ import { Reorder, PeopleOutline } from '@material-ui/icons'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import { format } from 'date-fns'
+import Hidden from '@material-ui/core/Hidden'
+import MenuIcon from '@material-ui/icons/Menu'
+import IconButton from '@material-ui/core/IconButton'
+
+import Login from './Login/Login'
 
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => {
   return {
     page: {
-      background: '#f9f9f9',
-      width: '100%',
-      padding: theme.spacing(3),
+      [theme.breakpoints.up('sm')]: {
+        width: '100%',
+        marginLeft: drawerWidth,
+      },
+      margin: 'auto'
     },
     root: {
       display: 'flex',
     },
     drawer: {
-      width: drawerWidth,
+      [theme.breakpoints.up('sm')]: {
+        width: drawerWidth,
+        flexShrink: 0,
+      },
     },
     drawerPaper: {
       width: drawerWidth,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
     },
     active: {
       background: '#f4f4f4',
@@ -37,8 +53,10 @@ const useStyles = makeStyles((theme) => {
       padding: theme.spacing(2),
     },
     appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
+      [theme.breakpoints.up('sm')]: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+      },
     },
     date: {
       flexGrow: 1,
@@ -50,10 +68,16 @@ const useStyles = makeStyles((theme) => {
   }
 })
 
-const Layout = ({ children }) => {
+const Layout = ({ children, window }) => {
+  const [mobileOpen, setMobileOpen] = React.useState(false)
   const classes = useStyles()
   const history = useHistory()
+  const theme = useTheme()
   const location = useLocation()
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen)
+  }
 
   const menuItems = [
     {
@@ -68,6 +92,34 @@ const Layout = ({ children }) => {
     },
   ]
 
+  const container =
+    window !== undefined ? () => window().document.body : undefined
+
+  const drawer = (
+    <div>
+      <div>
+        <Typography variant="h5" className={classes.title}>
+          Blog App
+        </Typography>
+      </div>
+
+      {/* links/list section */}
+      <List>
+        {menuItems.map((item) => (
+          <ListItem
+            button
+            key={item.text}
+            onClick={() => history.push(item.path)}
+            className={location.pathname === item.path ? classes.active : null}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  )
+
   return (
     <div className={classes.root}>
       {/* app bar */}
@@ -78,43 +130,51 @@ const Layout = ({ children }) => {
         color="primary"
       >
         <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography className={classes.date}>
             Today is the {format(new Date(), 'do MMMM Y')}
           </Typography>
+          <Login />
         </Toolbar>
       </AppBar>
 
       {/* side drawer */}
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{ paper: classes.drawerPaper }}
-        anchor="left"
-      >
-        <div>
-          <Typography variant="h5" className={classes.title}>
-            Blog App
-          </Typography>
-        </div>
-
-        {/* links/list section */}
-        <List>
-          {menuItems.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => history.push(item.path)}
-              className={
-                location.pathname === item.path ? classes.active : null
-              }
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-
+      <Hidden smUp implementation="css">
+        <Drawer
+          container={container}
+          variant="temporary"
+          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+      <Hidden xsDown implementation="css">
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant="permanent"
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
       {/* main content */}
       <div className={classes.page}>
         <div className={classes.toolbar}></div>

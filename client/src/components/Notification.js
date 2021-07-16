@@ -2,11 +2,19 @@
 import PropType from 'prop-types'
 import { useSelector } from 'react-redux'
 
+import Typography from '@material-ui/core/Typography'
+
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
 
   return (
-    <div className={notification.classification}>{notification.message}</div>
+    <Typography
+      variant="subtitle1"
+      gutterBottom
+      className={notification.classification}
+    >
+      {notification.message}
+    </Typography>
   )
 }
 

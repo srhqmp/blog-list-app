@@ -19,7 +19,7 @@ const Togglable = React.forwardRef((props, ref) => {
   })
 
   return (
-    <Container style={{ marginBottom: 20 }}>
+    <Container style={{ marginTop: 5 }}>
       <span style={hideWhenVisible}>
         <Button
           type="submit"

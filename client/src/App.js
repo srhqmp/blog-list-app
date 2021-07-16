@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Notification from './components/Notification'
 // import Navigation from './components/Navigation'
-import Login from './components/Login/Login'
+// import Login from './components/Login/Login'
 import Blogs from './components/Blogs/Blogs'
 import Blog from './components/Blogs/Blog'
 import Users from './components/Users/Users'
@@ -36,7 +36,6 @@ const App = () => {
           {/* <Navigation />
           <h2>blog app</h2> */}
           <Notification />
-          <Login />
           <Switch>
             <Route exact path="/">
               <Blogs />
