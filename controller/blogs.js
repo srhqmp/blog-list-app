@@ -35,7 +35,7 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
-  savedBlog ? response.status(200).json(savedBlog) : response.status(400).end()
+  savedBlog ? response.status(200).json(savedBlog) : response.status(400).send('Unauthorized user')
 })
 
 const checkBlogInUser = (user, blogId) => {
