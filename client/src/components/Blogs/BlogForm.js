@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 import { makeStyles } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles({
   field: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles({
 
 const BlogForm = ({ blogFormRef }) => {
   const classes = useStyles()
+  const history = useHistory()
   const dispatch = useDispatch()
 
   const titleInput = useField('text')
@@ -40,13 +42,13 @@ const BlogForm = ({ blogFormRef }) => {
       author: authorInput.value,
       url: urlInput.value,
     }
-
     console.log(blogObj)
     dispatch(addBlog(blogObj))
     titleInput.onReset()
     authorInput.onReset()
     urlInput.onReset()
     blogFormRef.current.toggleVisible()
+    history.push('/')
   }
 
   return (

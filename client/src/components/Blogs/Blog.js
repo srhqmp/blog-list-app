@@ -231,7 +231,7 @@ const Blog = () => {
             <Link
               to={blog.url}
               target="_blank"
-              rel="noreferrer"
+              // rel="noreferrer"
               className={classes.details}
               color="textSecondary"
             >
