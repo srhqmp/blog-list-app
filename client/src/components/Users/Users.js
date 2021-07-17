@@ -16,10 +16,6 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 250,
-    maxWidth: 350,
-  },
   link: {
     textDecoration: 'none',
   },
@@ -32,7 +28,9 @@ const UserList = ({ user }) => {
     <TableRow>
       <TableCell>
         <Link className={classes.link} to={`/users/${user.id}`}>
-          <Typography color="secondary">{user.name}</Typography>
+          <Typography color="secondary" variant="h6">
+            {user.name}
+          </Typography>
         </Link>
       </TableCell>
       <TableCell>{user.blogs.length}</TableCell>
@@ -41,7 +39,6 @@ const UserList = ({ user }) => {
 }
 
 const Users = () => {
-  const classes = useStyles()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -53,14 +50,14 @@ const Users = () => {
     return (
       <Container>
         <Typography
-          variant="h6"
+          variant="h4"
           color="textSecondary"
           component="h2"
           gutterBottom
         >
           Users
         </Typography>
-        <TableContainer component={Paper} className={classes.table}>
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>

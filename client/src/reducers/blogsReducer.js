@@ -92,7 +92,7 @@ export const addComment = (data) => {
         type: 'UPDATE_BLOG',
         content: updatedBlog,
       })
-      const message = `You've successfully added a comment on ' ${updatedBlog.title} by ${updatedBlog.author}`
+      const message = `You've successfully added a comment on ${updatedBlog.title} by ${updatedBlog.author}`
       handleSuccess(dispatch, message)
     } catch (e) {
       handleError(dispatch, e)

@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux'
 import { useField } from '../../hooks'
 
 import { addBlog } from '../../reducers/blogsReducer'
-
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
@@ -41,6 +40,8 @@ const BlogForm = ({ blogFormRef }) => {
       author: authorInput.value,
       url: urlInput.value,
     }
+
+    console.log(blogObj)
     dispatch(addBlog(blogObj))
     titleInput.onReset()
     authorInput.onReset()
@@ -52,7 +53,6 @@ const BlogForm = ({ blogFormRef }) => {
     <form
       id="blogForm"
       onSubmit={handleNewBlog}
-      noValidate
       autoComplete="off"
       className={classes.form}
     >
@@ -72,6 +72,7 @@ const BlogForm = ({ blogFormRef }) => {
         required
         {...titleInput}
         fullWidth
+        size="small"
       />
       <TextField
         className={classes.field}
@@ -81,6 +82,7 @@ const BlogForm = ({ blogFormRef }) => {
         required
         {...authorInput}
         fullWidth
+        size="small"
       />
       <TextField
         className={classes.field}
@@ -90,6 +92,7 @@ const BlogForm = ({ blogFormRef }) => {
         required
         {...urlInput}
         fullWidth
+        size="small"
       />
       <Button
         type="submit"
@@ -97,6 +100,7 @@ const BlogForm = ({ blogFormRef }) => {
         variant="contained"
         endIcon={<KeyboardArrowRightIcon />}
         className={classes.submit}
+        size="small"
       >
         Submit
       </Button>

@@ -22,11 +22,17 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   const body = request.body
   const user = request.user
 
+  const { title, author, likes, url } = body
+
+  if (!title || !likes || !url) {
+    return response.status(400).send('Please fill all fields')
+  }
+
   const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    likes: body.likes,
-    url: body.url,
+    title,
+    author,
+    likes,
+    url,
     user: user._id,
     username: user.username,
   })
@@ -35,7 +41,9 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
-  savedBlog ? response.status(200).json(savedBlog) : response.status(400).send('Unauthorized user')
+  return savedBlog
+    ? response.status(200).json(savedBlog)
+    : response.status(400).send('Unauthorized user')
 })
 
 const checkBlogInUser = (user, blogId) => {

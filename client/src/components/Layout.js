@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkLogin } from '../reducers/loginReducer'
+
 import { makeStyles, useTheme } from '@material-ui/core'
 import Drawer from '@material-ui/core/Drawer'
 import Typography from '@material-ui/core/Typography'
@@ -14,6 +17,9 @@ import { format } from 'date-fns'
 import Hidden from '@material-ui/core/Hidden'
 import MenuIcon from '@material-ui/icons/Menu'
 import IconButton from '@material-ui/core/IconButton'
+import BlogForm from './Blogs/BlogForm'
+import Togglable from './Togglable'
+import { Divider } from '@material-ui/core'
 
 import Login from './Login/Login'
 
@@ -26,7 +32,7 @@ const useStyles = makeStyles((theme) => {
         width: '100%',
         marginLeft: drawerWidth,
       },
-      margin: 'auto'
+      margin: 'auto',
     },
     root: {
       display: 'flex',
@@ -65,6 +71,10 @@ const useStyles = makeStyles((theme) => {
     avatar: {
       marginLeft: theme.spacing(2),
     },
+    divider: {
+      marginBottom: 20,
+      marginTop: 20,
+    },
   }
 })
 
@@ -74,6 +84,13 @@ const Layout = ({ children, window }) => {
   const history = useHistory()
   const theme = useTheme()
   const location = useLocation()
+
+  const loggedinUser = useSelector((state) => state.loggedinUser)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(checkLogin())
+  }, [dispatch])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -95,6 +112,14 @@ const Layout = ({ children, window }) => {
   const container =
     window !== undefined ? () => window().document.body : undefined
 
+  const blogFormRef = useRef()
+
+  const blogForm = () => (
+    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+      <BlogForm blogFormRef={blogFormRef} />
+    </Togglable>
+  )
+
   const drawer = (
     <div>
       <div>
@@ -102,7 +127,7 @@ const Layout = ({ children, window }) => {
           Blog App
         </Typography>
       </div>
-
+      <Divider className={classes.divider} />
       {/* links/list section */}
       <List>
         {menuItems.map((item) => (
@@ -116,6 +141,8 @@ const Layout = ({ children, window }) => {
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
+        <Divider className={classes.divider} />
+        {loggedinUser && blogForm()}
       </List>
     </div>
   )
@@ -140,7 +167,7 @@ const Layout = ({ children, window }) => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.date}>
-            Today is the {format(new Date(), 'do MMMM Y')}
+            {format(new Date(), ' MMMM do Y')}
           </Typography>
           <Login />
         </Toolbar>

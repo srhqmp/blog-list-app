@@ -1,12 +1,10 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import BlogList from './BlogList'
 
 import { checkLogin } from '../../reducers/loginReducer'
 import { initializeBlogs } from '../../reducers/blogsReducer'
-import Togglable from '../Togglable'
-import BlogForm from './BlogForm'
 
 import Container from '@material-ui/core/Container'
 import Masonry from 'react-masonry-css'
@@ -24,14 +22,6 @@ const Blogs = () => {
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
-
-  const blogFormRef = useRef()
-
-  const blogForm = () => (
-    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-      <BlogForm blogFormRef={blogFormRef} />
-    </Togglable>
-  )
 
   const blogList = () =>
     blogs.map((blog) => (
@@ -51,7 +41,6 @@ const Blogs = () => {
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column"
       >
-        {loggedinUser && blogForm()}
         {blogList()}
       </Masonry>
     </Container>

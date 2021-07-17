@@ -26,6 +26,7 @@ const Togglable = React.forwardRef((props, ref) => {
           color="secondary"
           variant="contained"
           onClick={toggleVisible}
+          style={{ width: '100%' }}
         >
           {props.buttonLabel}
         </Button>
@@ -38,6 +39,7 @@ const Togglable = React.forwardRef((props, ref) => {
           variant="contained"
           onClick={toggleVisible}
           display="inline"
+          size="small"
         >
           cancel
         </Button>

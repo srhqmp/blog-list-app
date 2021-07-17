@@ -24,8 +24,8 @@ const Login = () => {
   }
 
   const userLogout = () => (
-    <Typography>
-      {`Hi ${loggedinUser.name}`}{' '}
+    <Typography style={{ position: 'relative', top: 2 }}>
+      {`${loggedinUser.name}`}{' '}
       <Button
         color="secondary"
         variant="contained"
