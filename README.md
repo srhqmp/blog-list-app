@@ -8,7 +8,7 @@
   </p>
 
   <div align="center">
-    <a href="https://my-list-by-srhqmp.herokuapp.com/"  target="_blank">
+    <a href="https://blog-list-app-mern.herokuapp.com/"  target="_blank">
     <img src="./img/img1.PNG" alt="project image" width="500" height="auto">
   </a>
   </div>
