@@ -21,6 +21,7 @@ import BlogForm from './Blogs/BlogForm'
 import Togglable from './Togglable'
 import { Divider } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
+import GitHubIcon from '@material-ui/icons/GitHub'
 
 import Login from './Login/Login'
 
@@ -162,6 +163,18 @@ const Layout = ({ children, window }) => {
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
+
+        <ListItem
+          button
+          href="https://github.com/srhqmp/blog-list-app"
+          target="_blank"
+          component="a"
+        >
+          <ListItemIcon>
+            <GitHubIcon color="secondary" />
+          </ListItemIcon>
+          <ListItemText primary="View Code" />
+        </ListItem>
         <Divider className={classes.divider} />
         {loggedinUser && blogForm()}
       </List>
