@@ -26,7 +26,8 @@ const useStyles = makeStyles({
   },
   content: {
     padding: 20,
-    maxWidth: 600
+    maxWidth: 600,
+    margin: 'auto',
   },
   title: {
     marginTop: 70,
@@ -73,6 +74,7 @@ export const RegisterUser = () => {
         component="h2"
         gutterBottom
         className={classes.title}
+        align="center"
       >
         Register
       </Typography>
