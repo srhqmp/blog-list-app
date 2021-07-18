@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useField } from '../../hooks'
+import { useHistory } from 'react-router'
 
 import { login } from '../../reducers/loginReducer'
 
@@ -12,19 +13,20 @@ const useStyles = makeStyles({
   field: {
     marginLeft: 5,
     display: 'inline-block',
-    padding: 0
+    padding: 0,
   },
   form: {
     display: 'inline',
   },
   login: {
-    marginRight: 15,
-    marginLeft: 15,
-    display: 'inline'
+    marginRight: 5,
+    marginLeft: 5,
+    display: 'inline',
   },
 })
 
 const LoginForm = ({ loginFormRef }) => {
+  const history = useHistory()
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -42,6 +44,7 @@ const LoginForm = ({ loginFormRef }) => {
     usernameInput.onReset()
     passwordInput.onReset()
     loginFormRef.current.toggleVisible()
+    history.push('/')
   }
 
   return (

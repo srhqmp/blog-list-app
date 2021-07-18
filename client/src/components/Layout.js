@@ -5,7 +5,7 @@ import { checkLogin } from '../reducers/loginReducer'
 import { makeStyles, useTheme } from '@material-ui/core'
 import Drawer from '@material-ui/core/Drawer'
 import Typography from '@material-ui/core/Typography'
-import { useHistory, useLocation } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -20,6 +20,7 @@ import IconButton from '@material-ui/core/IconButton'
 import BlogForm from './Blogs/BlogForm'
 import Togglable from './Togglable'
 import { Divider } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 
 import Login from './Login/Login'
 
@@ -55,8 +56,14 @@ const useStyles = makeStyles((theme) => {
     active: {
       background: '#f4f4f4',
     },
+    titleBox: {
+      height: 44,
+    },
     title: {
-      padding: theme.spacing(2),
+      position: 'relative',
+      top: 15,
+      left: 15,
+      textDecoration: 'none',
     },
     appBar: {
       [theme.breakpoints.up('sm')]: {
@@ -74,6 +81,15 @@ const useStyles = makeStyles((theme) => {
     divider: {
       marginBottom: 20,
       marginTop: 20,
+    },
+    titleDivider: {
+      marginTop: 100,
+      marginBottom: 20,
+    },
+    register: {
+      position: 'relative',
+      left: -10,
+      top: -2,
     },
   }
 })
@@ -122,12 +138,17 @@ const Layout = ({ children, window }) => {
 
   const drawer = (
     <div>
-      <div>
-        <Typography variant="h5" className={classes.title}>
-          Blog App
+      <div className={classes.titleBox}>
+        <Typography
+          variant="h3"
+          className={classes.title}
+          component={Link}
+          to="/"
+        >
+          Blog List App
         </Typography>
       </div>
-      <Divider className={classes.divider} />
+      <Divider className={classes.titleDivider} />
       {/* links/list section */}
       <List>
         {menuItems.map((item) => (
@@ -170,6 +191,18 @@ const Layout = ({ children, window }) => {
             {format(new Date(), ' MMMM do Y')}
           </Typography>
           <Login />
+          {!loggedinUser && (
+            <Button
+              component={Link}
+              to={'/register'}
+              color="primary"
+              variant="contained"
+              className={classes.register}
+              size="small"
+            >
+              Register
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 

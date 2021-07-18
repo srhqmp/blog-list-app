@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUsers } from '../../reducers/usersReducer'
+import format from 'date-fns/format'
 
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
@@ -23,7 +24,6 @@ const useStyles = makeStyles({
 
 const UserList = ({ user }) => {
   const classes = useStyles()
-
   return (
     <TableRow>
       <TableCell>
@@ -34,6 +34,7 @@ const UserList = ({ user }) => {
         </Link>
       </TableCell>
       <TableCell>{user.blogs.length}</TableCell>
+      <TableCell>{format(new Date(user.dateCreated), ' MMMM do Y')}</TableCell>
     </TableRow>
   )
 }
@@ -43,7 +44,7 @@ const Users = () => {
 
   useEffect(() => {
     dispatch(getUsers())
-  }, [])
+  }, [dispatch])
 
   const users = useSelector((state) => state.users)
   if (users) {
@@ -63,6 +64,7 @@ const Users = () => {
               <TableRow>
                 <TableCell></TableCell>
                 <TableCell>Blogs Created</TableCell>
+                <TableCell>User Since</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

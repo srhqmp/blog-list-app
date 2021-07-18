@@ -1,19 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import format from 'date-fns/format'
 
 import Card from '@material-ui/core/Card'
+import Container from '@material-ui/core/Container'
 import CardHeader from '@material-ui/core/CardHeader'
-import { makeStyles } from '@material-ui/core'
+import { CardContent, makeStyles } from '@material-ui/core'
 import Avatar from '@material-ui/core/Avatar'
-import { pink, blue } from '@material-ui/core/colors'
+import { pink, blue, green, yellow, red } from '@material-ui/core/colors'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles({
   avatar: {
     backgroundColor: (blog) => {
-      if (blog.title[0].toLowerCase() === 's') {
-        return pink[700]
+      switch (blog.author[0].toLowerCase()) {
+        case 's':
+          return red[700]
+        case 'b':
+          return pink[300]
+        case 'g':
+          return green[500]
+        case 'e':
+          return yellow[500]
+        default:
+          return blue[700]
       }
-      return blue[500]
     },
   },
   link: {
@@ -32,16 +43,23 @@ const BlogList = ({ blog }) => {
   return (
     <div>
       <Link to={`/blogs/${blog.id}`} className={classes.link}>
-        <Card elevation={1} className={classes.card}>
+        <Card elevation={1} className={classes.card} style={{ width: 400 }}>
           <CardHeader
             avatar={
               <Avatar className={classes.avatar}>
-                {blog.title[0].toUpperCase()}
+                {blog.author[0].toUpperCase()}
               </Avatar>
             }
-            title={blog.title}
-            subheader={blog.author}
+            title={blog.author}
+            subheader={format(new Date(blog.dateCreated), ' MMMM do Y')}
           />
+          <CardContent>
+            <Container>
+              <Typography color="textSecondary" noWrap>
+                {blog.title}
+              </Typography>
+            </Container>
+          </CardContent>
         </Card>
       </Link>
     </div>

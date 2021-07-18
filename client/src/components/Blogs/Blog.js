@@ -6,6 +6,7 @@ import { initializeBlogs } from '../../reducers/blogsReducer'
 import { likeBlog, removeBlog, addComment } from '../../reducers/blogsReducer'
 import { checkLogin } from '../../reducers/loginReducer'
 import { useField } from '../../hooks'
+import { format } from 'date-fns'
 
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
@@ -17,7 +18,8 @@ import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined'
 import Button from '@material-ui/core/Button'
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined'
 import IconButton from '@material-ui/core/IconButton'
-import Link from '@material-ui/core/Link'
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
+//import Link from '@material-ui/core/Link'
 import TextField from '@material-ui/core/TextField'
 import Divider from '@material-ui/core/Divider'
 import Card from '@material-ui/core/Card'
@@ -27,7 +29,7 @@ import { pink } from '@material-ui/core/colors'
 
 const useStyles = makeStyles({
   paper: {
-    padding: 20,
+    padding: '30px 20px 50px 20px',
   },
   details: {
     display: 'flex',
@@ -54,14 +56,18 @@ const useStyles = makeStyles({
     marginBottom: 10,
   },
   commentBtn: {
-    marginTop: 5,
+    marginTop: 15,
     marginBottom: 5,
   },
   divider: {
     marginTop: 30,
   },
   avatar: {
-    backgroundColor: pink[700]
+    backgroundColor: pink[700],
+  },
+  dateCreated: {
+    marginTop: 10,
+    display: 'flex',
   },
 })
 
@@ -184,7 +190,7 @@ const Blog = () => {
     return (
       <Container>
         <Typography
-          variant="h5"
+          variant="h6"
           color="textSecondary"
           component="h2"
           gutterBottom
@@ -194,7 +200,7 @@ const Blog = () => {
         </Typography>
         {inputAddComment()}
         {comments ? (
-          <Card>
+          <Card elevation={0} className={classes.comments}>
             {comments.map((comment, index) => (
               <div key={index}>
                 <CardHeader
@@ -218,7 +224,7 @@ const Blog = () => {
 
   return (
     <Container>
-      <Typography variant="h3" component="h2" color="secondary" gutterBottom>
+      <Typography variant="h4" component="h2" color="secondary" gutterBottom>
         {blog && blog.title}
       </Typography>
       <Paper className={classes.paper}>
@@ -228,15 +234,14 @@ const Blog = () => {
           className={classes.link}
         >
           {blog && (
-            <Link
-              to={blog.url}
+            <a
+              href={blog.url}
               target="_blank"
-              // rel="noreferrer"
+              rel="noreferrer"
               className={classes.details}
-              color="textSecondary"
             >
               <LinkOutlinedIcon className={classes.icon} /> {blog.url}
-            </Link>
+            </a>
           )}
         </Typography>
         {blog && displayLikes(blog.likes)}
@@ -247,6 +252,15 @@ const Blog = () => {
         >
           <PersonOutlineOutlinedIcon className={classes.icon} />
           {blog && `added by ${blog.author}`}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          color="textSecondary"
+          className={(classes.details, classes.dateCreated)}
+        >
+          <CalendarTodayIcon className={classes.icon} />
+          {blog &&
+            `Posted on ${format(new Date(blog.dateCreated), ' MMMM do Y')}`}
         </Typography>
         {blog && loggedinUser && removeBtn()}
         <Divider className={classes.divider} />

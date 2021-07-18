@@ -1,5 +1,7 @@
 import usersService from '../services/users'
-import { handleError } from './notificationReducer'
+import { handleError, handleSuccess } from './notificationReducer'
+import blogService from '../services/blogs'
+import { checkLogin } from './loginReducer'
 
 const reducer = (state = null, action) => {
   switch (action.type) {
@@ -7,6 +9,25 @@ const reducer = (state = null, action) => {
       return action.content
     default:
       return state
+  }
+}
+
+export const addNewUser = (userObj) => {
+  return async (dispatch) => {
+    try {
+      const response = await usersService.addNewUser(userObj)
+      blogService.setToken(response.data.token)
+      window.localStorage.setItem(
+        'BlogAppLoggedinUser',
+        JSON.stringify(response.data)
+      )
+      dispatch(checkLogin())
+      const message = `Successfully registered user ${response.data.username}`
+      handleSuccess(dispatch, message)
+    } catch (e) {
+      console.log(e.response.data)
+      handleError(dispatch, e)
+    }
   }
 }
 

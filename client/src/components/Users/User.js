@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUsers } from '../../reducers/usersReducer'
 
+import Paper from '@material-ui/core/Paper'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
@@ -17,7 +18,7 @@ const User = () => {
 
   useEffect(() => {
     dispatch(getUsers())
-  }, [])
+  }, [dispatch])
 
   const users = useSelector((state) => state.users)
   const user = users.find((user) => user.id === id)
@@ -56,12 +57,14 @@ const User = () => {
       <Typography variant="h3" component="h2" color="secondary" gutterBottom>
         {user && user.name}
       </Typography>
-      <div>
-        <Typography variant="h5" component="h3">
-          added blogs
-        </Typography>
-        {user && displayBlogs()}
-      </div>
+      <Paper>
+        <Container style={{ padding: 20 }}>
+          <Typography variant="h5" component="h3">
+            added blogs
+          </Typography>
+          {user && displayBlogs()}
+        </Container>
+      </Paper>
     </Container>
   )
 }

@@ -29,6 +29,10 @@ const blogSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  dateCreated: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 blogSchema.set('toJSON', {

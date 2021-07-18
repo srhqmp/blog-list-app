@@ -1,15 +1,18 @@
 import React, { useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import LoginForm from './LoginForm'
 import Togglable from '../Togglable'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkLogin, logout } from '../../reducers/loginReducer'
 import { handleSuccess } from '../../reducers/notificationReducer'
+import { useHistory } from 'react-router'
 
 import Button from '@material-ui/core/Button'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import Typography from '@material-ui/core/Typography'
 
 const Login = () => {
+  const history = useHistory()
   const loggedinUser = useSelector((state) => state.loggedinUser)
   const dispatch = useDispatch()
 
@@ -21,11 +24,20 @@ const Login = () => {
     const message = `Successfully logged out ${loggedinUser.username}`
     dispatch(logout())
     handleSuccess(dispatch, message)
+    history.push('/')
   }
-
+  console.log('user:', loggedinUser)
   const userLogout = () => (
     <Typography style={{ position: 'relative', top: 2 }}>
-      {`${loggedinUser.name}`}{' '}
+      <Link
+        to={`/users/${loggedinUser.id}`}
+        style={{
+          textDecoration: 'none',
+          color: 'purple',
+          textTransform: 'capitalize',
+          marginRight: 5,
+        }}
+      >{`Hi ${loggedinUser.name}!`}</Link>
       <Button
         color="secondary"
         variant="contained"

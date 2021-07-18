@@ -6,7 +6,9 @@ const userExtractor = require('../utils/middleware').userExtractor
 
 // GET all blogs
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 2 })
+  const blogs = await Blog.find({})
+    .sort({ dateCreated: -1 })
+    .populate('user', { username: 1, name: 2 })
   response.json(blogs)
 })
 

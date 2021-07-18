@@ -8,6 +8,7 @@ import Blog from './components/Blogs/Blog'
 import Users from './components/Users/Users'
 import User from './components/Users/User'
 import Layout from './components/Layout'
+import RegisterUser from './components/RegisterUser'
 
 import { createTheme, ThemeProvider } from '@material-ui/core'
 import { purple } from '@material-ui/core/colors'
@@ -48,6 +49,9 @@ const App = () => {
             </Route>
             <Route exact path="/users/:id">
               <User />
+            </Route>
+            <Route exact path="/register">
+              <RegisterUser />
             </Route>
           </Switch>
         </Layout>

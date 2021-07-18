@@ -1,18 +1,33 @@
 import blogsService from '../services/blogs'
 import { handleSuccess, handleError } from './notificationReducer'
 
+const sortDate = (a, b) => {
+  var key1 = new Date(a.dateCreated)
+  var key2 = new Date(b.dateCreated)
+
+  if (key1 < key2) {
+    return 1
+  } else if (key1 === key2) {
+    return 0
+  } else {
+    return -1
+  }
+}
+
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'INIT_BLOGS':
-      return action.content
+      return action.content.sort((a, b) => sortDate(a, b))
     case 'ADD_BLOG':
-      return state.concat(action.content)
+      return state.concat(action.content).sort((a, b) => sortDate(a, b))
     case 'REMOVE_BLOG':
-      return state.filter((blog) => blog.id !== action.content.id)
+      return state
+        .filter((blog) => blog.id !== action.content.id)
+        .sort((a, b) => sortDate(a, b))
     case 'UPDATE_BLOG':
-      return state.map((blog) =>
-        blog.id === action.content.id ? action.content : blog
-      )
+      return state
+        .map((blog) => (blog.id === action.content.id ? action.content : blog))
+        .sort((a, b) => sortDate(a, b))
     default:
       return state
   }
