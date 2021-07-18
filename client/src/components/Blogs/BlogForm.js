@@ -42,7 +42,6 @@ const BlogForm = ({ blogFormRef }) => {
       author: authorInput.value,
       url: urlInput.value,
     }
-    console.log(blogObj)
     dispatch(addBlog(blogObj))
     titleInput.onReset()
     authorInput.onReset()

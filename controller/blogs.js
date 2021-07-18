@@ -25,11 +25,9 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   const user = request.user
 
   const { title, author, url } = body
-  console.log('body:', body)
   if (!title || !author || !url) {
     return response.status(400).send('Please fill all fields')
   }
-  console.log('nakalusot')
 
   const blog = new Blog({
     title,

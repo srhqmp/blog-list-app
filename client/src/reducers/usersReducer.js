@@ -25,7 +25,6 @@ export const addNewUser = (userObj) => {
       const message = `Successfully registered user ${response.data.username}`
       handleSuccess(dispatch, message)
     } catch (e) {
-      console.log(e.response.data)
       handleError(dispatch, e)
     }
   }

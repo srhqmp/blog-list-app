@@ -26,7 +26,6 @@ const Login = () => {
     handleSuccess(dispatch, message)
     history.push('/')
   }
-  console.log('user:', loggedinUser)
   const userLogout = () => (
     <Typography style={{ position: 'relative', top: 2 }}>
       <Link
