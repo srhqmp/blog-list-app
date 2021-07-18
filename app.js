@@ -1,6 +1,7 @@
 require('dotenv')
 const config = require('./utils/config')
 const express = require('express')
+const path = require('path')
 require('express-async-errors')
 const app = express()
 const cors = require('cors')

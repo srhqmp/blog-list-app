@@ -53,6 +53,9 @@ const App = () => {
             <Route exact path="/register">
               <RegisterUser />
             </Route>
+            <Route exact path="*">
+              <Blogs />
+            </Route>
           </Switch>
         </Layout>
       </Router>
